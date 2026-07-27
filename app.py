@@ -106,10 +106,11 @@ def dashboard():
 # Add Customer Page
 # =========================
 @app.route("/customers")
-def customers(): 
+def customers():
     if "username" not in session:
         return redirect("/")
-        return render_template("customers.html")
+
+    return render_template("customers.html")
 
 
 # =========================
