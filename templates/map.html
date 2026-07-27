@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <title>Gokul Milk Delivery Map</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
+    <style>
+        body{
+            margin:0;
+            font-family:Arial;
+        }
+
+        h2{
+            background:#198754;
+            color:white;
+            text-align:center;
+            padding:15px;
+            margin:0;
+        }
+
+        #map{
+            width:100%;
+            height:90vh;
+        }
+        @media (max-width:768px){
+
+.container{
+    flex-direction:column;
+}
+
+.sidebar{
+    width:100%;
+    min-height:auto;
+}
+
+.cards{
+    flex-direction:column;
+}
+
+.card{
+    width:100%;
+}
+
+table{
+    display:block;
+    overflow-x:auto;
+}
+
+}
+    </style>
+</head>
+
+<body>
+
+<h2>🥛 Gokul Milk Delivery Map</h2>
+
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+
+var map = L.map('map');
+
+L.tileLayer(
+'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+{
+    maxZoom:19,
+    attribution:'© OpenStreetMap'
+}).addTo(map);
+
+var bounds = [];
+
+{% for customer in customers %}
+
+{% if customer.latitude and customer.longitude %}
+
+var marker = L.marker([
+    {{ customer.latitude }},
+    {{ customer.longitude }}
+]).addTo(map);
+
+bounds.push([
+    {{ customer.latitude }},
+    {{ customer.longitude }}
+]);
+
+marker.bindPopup(
+"<b>🥛 {{ customer.name }}</b><br>" +
+"🏠 House No: {{ customer.house_no }}<br>" +
+"📍 Address: {{ customer.address }}<br>" +
+"📞 Mobile: {{ customer.mobile }}<br>" +
+"🛣 Route: {{ customer.route }}<br>" +
+"🥛 Morning: {{ customer.morning }} L<br>" +
+"🥛 Evening: {{ customer.evening }} L<br>" +
+"💰 ₹ {{ customer.price_per_litre }}/Litre<br>" +
+"📅 Start: {{ customer.start_date }}<br>" +
+"🚚 Status: {{ customer.status }}<br><br>" +
+"<a target='_blank' href='https://www.google.com/maps/dir/?api=1&destination={{ customer.latitude }},{{ customer.longitude }}'>Navigate</a>"
+);
+
+{% endif %}
+
+{% endfor %}
+
+if(bounds.length > 0){
+    map.fitBounds(bounds);
+}else{
+    map.setView([11.0168,76.9558],13);
+}
+
+if(navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(function(position){
+
+        var myLocation = [
+            position.coords.latitude,
+            position.coords.longitude
+        ];
+
+        L.marker(myLocation)
+        .addTo(map)
+        .bindPopup("📍 Your Location");
+
+    });
+}
+
+</script>
+
+</body>
+</html>

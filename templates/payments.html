@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payments</title>
+
+    <style>
+
+        body{
+            font-family:Arial;
+            background:#f4fff4;
+            padding:20px;
+        }
+
+        h2{
+            color:green;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+        }
+
+        th,td{
+            border:1px solid #ccc;
+            padding:10px;
+            text-align:center;
+        }
+
+        th{
+            background:#198754;
+            color:white;
+        }
+
+        button{
+            background:green;
+            color:white;
+            border:none;
+            padding:8px 15px;
+            cursor:pointer;
+        }
+        @media (max-width:768px){
+
+.container{
+    flex-direction:column;
+}
+
+.sidebar{
+    width:100%;
+    min-height:auto;
+}
+
+.cards{
+    flex-direction:column;
+}
+
+.card{
+    width:100%;
+}
+
+table{
+    display:block;
+    overflow-x:auto;
+}
+
+}
+
+    </style>
+
+</head>
+
+<body>
+
+<h2>💰 Customer Payments</h2>
+
+<table>
+
+<tr>
+
+<th>ID</th>
+<th>Name</th>
+<th>Mobile</th>
+<th>Monthly Bill</th>
+<th>Payment</th>
+
+</tr>
+
+{% for customer in customers %}
+
+<tr>
+
+<td>{{ customer.id }}</td>
+
+<td>{{ customer.name }}</td>
+
+<td>{{ customer.mobile }}</td>
+
+<td>
+₹ {{ ((customer.morning|default(0)|float + customer.evening|default(0)|float) * (customer.price_per_litre|default(0)|float) * 30)|round(2) }}
+</td>
+
+<td>
+
+<a href="/pay/{{ customer.id }}">
+<button>Pay</button>
+</a>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</body>
+</html>

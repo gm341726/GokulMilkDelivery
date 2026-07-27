@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Delivery</title>
+
+    <style>
+        body{
+            font-family:Arial;
+            background:#f4fff4;
+            padding:20px;
+        }
+
+        h2{
+            color:green;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+        }
+
+        th,td{
+            border:1px solid #ccc;
+            padding:10px;
+            text-align:center;
+        }
+
+        th{
+            background:green;
+            color:white;
+        }
+
+        button{
+            padding:8px 15px;
+            background:#198754;
+            color:white;
+            border:none;
+            cursor:pointer;
+        }
+
+        button:hover{
+            background:#146c43;
+        }
+        @media (max-width:768px){
+
+.container{
+    flex-direction:column;
+}
+
+.sidebar{
+    width:100%;
+    min-height:auto;
+}
+
+.cards{
+    flex-direction:column;
+}
+
+.card{
+    width:100%;
+}
+
+table{
+    display:block;
+    overflow-x:auto;
+}
+
+}
+    </style>
+</head>
+
+<body>
+
+<h2>🚚 Daily Delivery</h2>
+
+<table>
+
+<tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>House No</th>
+    <th>Morning</th>
+    <th>Evening</th>
+    <th>Status</th>
+</tr>
+
+{% for customer in customers %}
+
+<tr>
+
+<td>{{ customer.id }}</td>
+
+<td>{{ customer.name }}</td>
+
+<td>{{ customer.house_no }}</td>
+
+<td>{{ customer.morning }} L</td>
+
+<td>{{ customer.evening }} L</td>
+
+<td>
+
+<form action="/mark_delivery/{{ customer.id }}" method="POST">
+
+    <select name="morning_status">
+        <option value="Pending">Pending</option>
+        <option value="Delivered">Delivered</option>
+    </select>
+
+    <br><br>
+
+    <select name="evening_status">
+        <option value="Pending">Pending</option>
+        <option value="Delivered">Delivered</option>
+    </select>
+
+    <br><br>
+
+    <button type="submit">Save</button>
+
+</form>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery History</title>
+
+    <style>
+        body{
+            font-family:Arial;
+            background:#f4fff4;
+            padding:20px;
+        }
+
+        h2{
+            color:green;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+        }
+
+        th,td{
+            border:1px solid #ccc;
+            padding:10px;
+            text-align:center;
+        }
+
+        th{
+            background:#198754;
+            color:white;
+        }
+
+        .delivered{
+            color:green;
+            font-weight:bold;
+        }
+
+        .pending{
+            color:red;
+            font-weight:bold;
+        }
+        @media (max-width:768px){
+
+.container{
+    flex-direction:column;
+}
+
+.sidebar{
+    width:100%;
+    min-height:auto;
+}
+
+.cards{
+    flex-direction:column;
+}
+
+.card{
+    width:100%;
+}
+
+table{
+    display:block;
+    overflow-x:auto;
+}
+
+}
+    </style>
+</head>
+
+<body>
+
+<h2>📅 Delivery History</h2>
+
+<table>
+
+<tr>
+    <th>Date</th>
+    <th>Customer</th>
+    <th>Morning</th>
+    <th>Evening</th>
+</tr>
+
+{% for d in deliveries %}
+
+<tr>
+
+<td>{{ d.delivery_date }}</td>
+
+<td>{{ d.name }}</td>
+
+<td>
+{% if d.morning_status == "Delivered" %}
+<span class="delivered">✅ Delivered</span>
+{% else %}
+<span class="pending">❌ Pending</span>
+{% endif %}
+</td>
+
+<td>
+{% if d.evening_status == "Delivered" %}
+<span class="delivered">✅ Delivered</span>
+{% else %}
+<span class="pending">❌ Pending</span>
+{% endif %}
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+<br>
+
+<a href="/dashboard">⬅ Back to Dashboard</a>
+
+</body>
+</html>

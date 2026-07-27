@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Customer</title>
+</head>
+<body>
+
+<h2>Edit Customer</h2>
+
+<form action="/update_customer/{{ customer.id }}" method="POST">
+
+    Name:<br>
+    <input type="text" name="name" value="{{ customer.name }}"><br><br>
+
+    Mobile:<br>
+    <input type="text" name="mobile" value="{{ customer.mobile }}"><br><br>
+
+    Address:<br>
+    <input type="text" name="address" value="{{ customer.address }}"><br><br>
+
+    Route:<br>
+    <input type="text" name="route" value="{{ customer.route }}"><br><br>
+
+    Morning Milk (Litres):<br>
+    <input type="text" name="morning" value="{{ customer.morning }}"><br><br>
+
+    Evening Milk (Litres):<br>
+    <input type="text" name="evening" value="{{ customer.evening }}"><br><br>
+
+    Status:<br>
+    <select name="status">
+        <option value="Active" {% if customer.status=="Active" %}selected{% endif %}>Active</option>
+        <option value="Inactive" {% if customer.status=="Inactive" %}selected{% endif %}>Inactive</option>
+    </select>
+
+    <br><br>
+
+    <input type="submit" value="Update Customer">
+
+</form>
+
+</body>
+</html>

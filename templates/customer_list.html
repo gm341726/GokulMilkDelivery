@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer List</title>
+    <style>
+        body{
+            font-family:Arial;
+            background:#f4fff4;
+            padding:20px;
+        }
+
+        h1{
+            color:green;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+        }
+
+        th,td{
+            border:1px solid #ccc;
+            padding:10px;
+            text-align:center;
+        }
+
+        th{
+            background:green;
+            color:white;
+        }
+        @media (max-width:768px){
+
+.container{
+    flex-direction:column;
+}
+
+.sidebar{
+    width:100%;
+    min-height:auto;
+}
+
+.cards{
+    flex-direction:column;
+}
+
+.card{
+    width:100%;
+}
+
+table{
+    display:block;
+    overflow-x:auto;
+}
+
+}
+    </style>
+</head>
+
+<body>
+
+<h1>🥛 Customer List</h1>
+<form method="GET" action="/customer_list">
+
+    <input
+        type="text"
+        name="search"
+        placeholder="Search Name / Mobile / Route"
+        value="{{ search }}">
+
+    <button type="submit">Search</button>
+
+    <a href="/customer_list">
+        <button type="button">Clear</button>
+    </a>
+
+</form>
+
+<br>
+<table>
+
+<tr>
+<th>ID</th>
+<th>Name</th>
+<th>House No</th>
+<th>Price/Litre</th>
+<th>Start Date</th>
+<th>Map</th>
+<th>Mobile</th>
+<th>Address</th>
+<th>Route</th>
+<th>Morning</th>
+<th>Evening</th>
+<th>Status</th>
+<th>Action</th>
+<th>Delete</th>
+<th>Bill</th>
+<th>Navigation</th>
+</tr>
+
+{% for customer in customers %}
+
+<tr>
+<td>{{ customer["id"] }}</td>
+<td>{{ customer["name"] }}</td>
+<td>{{ customer["house_no"] }}</td>
+<td>₹ {{ customer["price_per_litre"] }}</td>
+<td>{{ customer["start_date"] }}</td>
+<td>
+    <a href="/map">View Map</a>
+</td>
+<td>{{ customer["mobile"] }}</td>
+<td>{{ customer["address"] }}</td>
+<td>{{ customer["route"] }}</td>
+<td>{{ customer["morning"] }}</td>
+<td>{{ customer["evening"] }}</td>
+<td>{{ customer["status"] }}</td>
+<td>
+    <a href="/edit_customer/{{ customer.id }}">Edit</a>
+</td>
+<td>
+    <a href="/delete_customer/{{ customer.id }}"
+       onclick="return confirm('Delete this customer?')">
+       Delete
+    </a>
+</td>
+<td>
+    <a href="/bill/{{ customer.id }}">
+        <button>Bill</button>
+    </a>
+</td>
+<td>
+{% if customer.latitude and customer.longitude %}
+<button onclick="navigateToCustomer('{{ customer.latitude }}','{{ customer.longitude }}')">
+    🧭 Navigate
+</button>
+{% else %}
+No Location
+{% endif %}
+</td>
+</tr>
+
+{% endfor %}
+
+</table>
+<script>
+function navigateToCustomer(customerLat, customerLng) {
+
+    if (navigator.geolocation) {
+
+        navigator.geolocation.getCurrentPosition(function(position) {
+
+            const currentLat = position.coords.latitude;
+            const currentLng = position.coords.longitude;
+
+            const url =
+                `https://www.google.com/maps/dir/?api=1&origin=${currentLat},${currentLng}&destination=${customerLat},${customerLng}`;
+
+            window.open(url, "_blank");
+        navigator.geolocation.getCurrentPosition(function(position) {
+        }, function() {
+            alert("Unable to get your current location.");
+        });
+
+    } else {
+        alert("Geolocation is not supported by this browser.");
+    }const options = {
+  enableHighAccuracy: true,
+  timeout: 5000,
+  maximumAge: 0,
+};
+
+function success(pos) {
+  const crd = pos.coords;
+
+  console.log("Your current position is:");
+  console.log(`Latitude: ${crd.latitude}`);
+  console.log(`Longitude: ${crd.longitude}`);
+  console.log(`More or less ${crd.accuracy} meters.`);
+}
+
+function error(err) {
+  console.warn(`ERROR(${err.code}): ${err.message}`);
+}
+
+navigator.geolocation.getCurrentPosition(success, error, options);
+}
+</script>
+</body>
+</html>

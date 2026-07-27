@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revenue Report</title>
+
+    <style>
+
+    body{
+        margin:0;
+        font-family:Arial;
+        background:#f4f4f4;
+    }
+
+    h1{
+        background:#198754;
+        color:white;
+        margin:0;
+        padding:20px;
+        text-align:center;
+    }
+
+    .container{
+        padding:20px;
+    }
+
+    .cards{
+        display:flex;
+        gap:20px;
+        flex-wrap:wrap;
+        margin-bottom:30px;
+    }
+
+    .card{
+        flex:1;
+        min-width:220px;
+        background:white;
+        border-radius:10px;
+        box-shadow:0 0 10px #ccc;
+        padding:20px;
+        text-align:center;
+    }
+
+    .card h2{
+        color:green;
+        margin:10px 0;
+    }
+
+    table{
+        width:100%;
+        border-collapse:collapse;
+        background:white;
+    }
+
+    th{
+        background:#198754;
+        color:white;
+        padding:12px;
+    }
+
+    td{
+        border:1px solid #ddd;
+        padding:10px;
+        text-align:center;
+    }
+
+    a{
+        text-decoration:none;
+        color:white;
+    }
+
+    .back{
+        display:inline-block;
+        margin-top:20px;
+        background:#198754;
+        padding:12px 20px;
+        border-radius:5px;
+    }
+    @media (max-width:768px){
+
+.container{
+    flex-direction:column;
+}
+
+.sidebar{
+    width:100%;
+    min-height:auto;
+}
+
+.cards{
+    flex-direction:column;
+}
+
+.card{
+    width:100%;
+}
+
+table{
+    display:block;
+    overflow-x:auto;
+}
+
+}
+
+    </style>
+
+</head>
+
+<body>
+
+<h1>📊 Revenue Report</h1>
+
+<div class="container">
+
+<div class="cards">
+
+<div class="card">
+<h3>Total Revenue</h3>
+<h2>₹ {{ total_revenue }}</h2>
+</div>
+
+<div class="card">
+<h3>Total Payments</h3>
+<h2>{{ total_payments }}</h2>
+</div>
+
+<div class="card">
+<h3>Total Customers</h3>
+<h2>{{ total_customers }}</h2>
+</div>
+
+</div>
+
+<h2>Recent Payments</h2>
+
+<table>
+
+<tr>
+<th>Date</th>
+<th>Customer</th>
+<th>Amount</th>
+<th>Method</th>
+<th>Status</th>
+</tr>
+
+{% for payment in payments %}
+
+<tr>
+
+<td>{{ payment.payment_date }}</td>
+
+<td>{{ payment.name }}</td>
+
+<td>₹ {{ payment.amount }}</td>
+
+<td>{{ payment.payment_method }}</td>
+
+<td>{{ payment.status }}</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+<br>
+
+<a href="/dashboard" class="back">
+⬅ Back to Dashboard
+</a>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gokul Milk Delivery</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial;
+            background: #f5f5f5;
+        }
+
+        .header {
+            background: #198754;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 28px;
+        }
+
+        .container {
+            display: flex;
+        }
+
+        .sidebar {
+            width: 220px;
+            background: #146c43;
+            min-height: 100vh;
+        }
+
+        .sidebar a {
+            display: block;
+            color: white;
+            padding: 15px;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .sidebar a:hover {
+            background: #198754;
+        }
+
+        .content {
+            flex: 1;
+            padding: 30px;
+        }
+
+        .cards {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            width: 220px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px lightgray;
+            text-align: center;
+        }
+
+        .card h2 {
+            color: green;
+            margin: 0;
+        }
+
+        .card p {
+            font-size: 18px;
+        }
+        @media (max-width:768px){
+
+.container{
+    flex-direction:column;
+}
+
+.sidebar{
+    width:100%;
+    min-height:auto;
+}
+
+.cards{
+    flex-direction:column;
+}
+
+.card{
+    width:100%;
+}
+
+table{
+    display:block;
+    overflow-x:auto;
+}
+
+}
+.dark{
+
+background:#222;
+color:white;
+
+}
+
+.dark .card{
+
+background:#333;
+color:white;
+
+}
+
+.dark table{
+
+background:#333;
+color:white;
+
+}
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <img src="{{ url_for('static', filename='images/logo.png') }}"
+     height="60">
+
+   <h2>&#127842; Gokul Milk Delivery Management</h2>
+</div>
+
+<div class="container">
+
+    <div class="sidebar">
+        <a href="/dashboard">&#127968; Dashboard</a>
+        <a href="/customers">&#10133; Add Customer</a>
+        <a href="/customer_list">&#128203; Customer List</a>
+        <a href="/map">&#128506; Customer Map</a>
+        <a href="/daily_delivery">🚚 Daily Delivery</a>
+        <a href="/delivery_history">📅 Delivery History</a>
+        <a href="/payments">💰 Payments</a>
+        <a href="/payment_history">💳 Payment History</a>
+        <a href="/revenue">📊 Revenue Report</a>
+        <a href="/logout">🚪 Logout</a>
+        <button onclick="toggleMode()">
+🌙 Dark Mode
+</button>
+    </div>
+
+    <div class="content">
+
+        <h2>Welcome {{ username }}</h2>
+        <div class="cards">
+
+            <div class="card">
+                <h2>{{ total_customers }}</h2>
+                <p>Total Customers</p>
+            </div>
+
+            <div class="card">
+                <h2>{{ active_customers }}</h2>
+                <p>Active Customers</p>
+            </div>
+
+            <div class="card">
+                <h2>{{ inactive_customers }}</h2>
+                <p>Inactive Customers</p>
+            </div>
+
+            <div class="card">
+                <h2>&#8377; {{ "%.2f"|format(monthly_revenue) }}</h2>
+                <p>Estimated Monthly Revenue</p>
+            </div>
+
+        </div>
+
+    </div>
+<div class="card">
+<h2>{{ today_deliveries }}</h2>
+<p>Today's Deliveries</p>
+</div>
+
+<div class="card">
+<h2>{{ pending_payments }}</h2>
+<p>Pending Payments</p>
+</div>
+</div>
+<h2>Customer Statistics</h2>
+
+<canvas id="customerChart"></canvas>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const ctx = document.getElementById('customerChart');
+
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ['Active', 'Inactive'],
+        datasets: [{
+            label: 'Customers',
+            data: [
+                {{ active_customers }},
+                {{ inactive_customers }}
+            ]
+        }]
+    },
+    options: {
+        responsive: true
+    }
+});
+</script>
+<h2>Revenue Overview</h2>
+
+<canvas id="revenueChart"></canvas>
+<script>
+const revenueCtx = document.getElementById('revenueChart');
+
+new Chart(revenueCtx, {
+    type: 'doughnut',
+    data: {
+        labels: ['Monthly Revenue'],
+        datasets: [{
+            data: [{{ monthly_revenue }}],
+            backgroundColor: ['#198754']
+        }]
+    },
+    options: {
+        responsive: true
+    }
+});
+</script>
+<script>
+function toggleMode(){
+
+document.body.classList.toggle("dark");
+
+}
+</script>
+</body>
+</html>

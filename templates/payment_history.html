@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payment History</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#f4fff4;
+padding:20px;
+}
+
+h2{
+color:green;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th,td{
+border:1px solid #ccc;
+padding:10px;
+text-align:center;
+}
+
+th{
+background:green;
+color:white;
+}
+
+.paid{
+color:green;
+font-weight:bold;
+}
+
+.pending{
+color:red;
+font-weight:bold;
+}
+@media (max-width:768px){
+
+.container{
+    flex-direction:column;
+}
+
+.sidebar{
+    width:100%;
+    min-height:auto;
+}
+
+.cards{
+    flex-direction:column;
+}
+
+.card{
+    width:100%;
+}
+
+table{
+    display:block;
+    overflow-x:auto;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h2>💳 Payment History</h2>
+
+<table>
+
+<tr>
+
+<th>Date</th>
+<th>Customer</th>
+<th>Amount</th>
+<th>Method</th>
+<th>Status</th>
+
+</tr>
+
+{% for payment in payments %}
+
+<tr>
+
+<td>{{ payment.payment_date }}</td>
+
+<td>{{ payment.name }}</td>
+
+<td>₹ {{ payment.amount }}</td>
+
+<td>{{ payment.payment_method }}</td>
+
+<td>
+
+{% if payment.status=="Paid" %}
+
+<span class="paid">Paid</span>
+
+{% else %}
+
+<span class="pending">Pending</span>
+
+{% endif %}
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+<br>
+
+<a href="/dashboard">⬅ Dashboard</a>
+
+</body>
+</html>
