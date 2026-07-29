@@ -3,9 +3,16 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph
 from reportlab.lib.styles import getSampleStyleSheet
 from flask import Flask, render_template, request, redirect, send_file, session
 from datetime import date
+from werkzeug.security import generate_password_hash, check_password_hash
+import  os
+from flask import Flask
 
 app = Flask(__name__)
-app.secret_key = "gokul_milk_secret_key"
+
+app.secret_key = os.environ.get(
+    "SECRET_KEY",
+    "gokul_milk_delivery_2026_secure_key"
+)
 # =========================
 # Login Page
 # =========================
@@ -29,8 +36,8 @@ def dashboard():
         cursor = conn.cursor()
 
         cursor.execute(
-            "SELECT * FROM admin WHERE username=? AND password=?",
-            (username, password)
+            "SELECT * FROM admin WHERE username=?",
+            (username, )
         )
 
         admin = cursor.fetchone()
@@ -38,7 +45,9 @@ def dashboard():
         if admin is None:
             conn.close()
             return "<h2>❌ Invalid Username or Password</h2><a href='/'>Back to Login</a>"
-
+        if not check_password_hash(admin["password"], password):
+            conn.close()
+            return "<h2>❌ Invalid Username or Password</h2><a href='/'>Back to Login</a>"
         session["username"] = username
 
     else:
