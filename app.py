@@ -31,26 +31,24 @@ def dashboard():
         username = request.form.get("username")
         password = request.form.get("password")
 
-        print("Entered username:", username)
-        print("Entered password:", password)
+        
 
         conn = sqlite3.connect("milk_delivery.db")
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
 
-        cursor.execute("SELECT id, username FROM admin")
-        print("Admin users:", [dict(row) for row in cursor.fetchall()])
+        cursor.execute(
+            "SELECT * FROM admin WHERE username=?",
+            (username,)
+        )
+
         admin = cursor.fetchone()
-
-        print("Admin found:", admin)
-
+        
         if admin is None:
             conn.close()
             return "<h2>❌ Invalid Username or Password</h2><a href='/'>Back to Login</a>"
 
-        print("Stored hash:", admin["password"])
-        print("Password check:", check_password_hash(admin["password"], password))
-
+        
         if not check_password_hash(admin["password"], password):
             conn.close()
             return "<h2>❌ Invalid Username or Password</h2><a href='/'>Back to Login</a>"
